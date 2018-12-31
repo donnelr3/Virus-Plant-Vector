@@ -14,8 +14,8 @@ tic
 % Plant status codes:
 % 0 dead or absent
 % 1 susceptible
-% 2 infected   (12,22 etc. for multiple strains)
-% 3 resistant
+% 2 infected   (12,22 etc. for multiple strains, ignore as default reference is to additional capability)
+% 3 resistant, ignore as default reference is to additional capability
 
 % By default aphid carrying capacity is constant (i.e. not perdiodic), but code
 % facilitates periodicity
@@ -82,7 +82,7 @@ movingAphidAvr=0;
 countSS=0;
 threshSS=6; 
 
-%%%%%%%%% Ignore, variables used for testing %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% Ignore, variables used for specialized testing %%%%%%%%%%%%%%%%%%%%
 countOne=0;
 countTwo=0;
 countThree=0;
@@ -105,7 +105,7 @@ k2_fluc=0;
 k2_prd=2*seasonL;
 
 vee=1;     % attraction to infected plant
-veeR=1;     % attraction to resistant plant
+veeR=1;     % attraction to resistant plant, ignore as default reference is to additional capability
 pfeedS=pfeedSin; % prob of accepting probed suc plant
 pfeedR=0.75; % prob of accepting probed resis plant (by default there will be no resistants)
 
@@ -134,13 +134,13 @@ sigA2=20/100; % probability of loss of apterous aphid per apterous journey betwe
 bA1=1/50; % rate of on-plant alate mortality
 bA2=1/50; % rate of on-plant apterous mortality
 if aphidType==1
-    immA1=0; %JOINT:4; %10; % 2; % #immigrants per field i.e. deliberately not density-dependent     # 1 per day?
+    immA1=0; % #immigrants per field i.e. deliberately not density-dependent    
     immA2=0;
 elseif aphidType==2
-    immA1=0; %10; % 2; % #immigrants per field i.e. deliberately not density-dependent
+    immA1=0; % #immigrants per field i.e. deliberately not density-dependent
     immA2=0;
 elseif aphidType==3
-    immA2=0; %10; % 1; % #immigrants per field
+    immA2=0; % #immigrants per field
     immA1=0;
 end
 phiA1=2; % rate of alate dispersal
@@ -311,7 +311,7 @@ while t<fullTime
     alateStrains(counter,:)=alateStrTemp;   % total # of aphids on plants bearing a particular infection
     aptStrains(counter,:)=aptStrTemp;
     if sum(alateStrTemp+aptStrTemp)~=sum(sum(A1_2+A2_2)), disp('Error!!! Strain specific aphid count does not match total!'); disp(epsVec); disp(fieldP);  disp('!!!! NEW CHECK !!!!!!'); disp(alateStrTemp); disp(aptStrTemp); disp(sum(sum(A1_2))); disp(sum(sum(A2_2))); break; end
-    % myCheck(A2_0, A2_1, A2_2, A2_3, A2aphids) 
+   
     
     % Defining Events
     % We define 5 plant events
@@ -383,7 +383,7 @@ while t<fullTime
         if rePlant, fieldP(sites_s(rand3))=1; else fieldP(sites_s(rand3))=0; end
         %end
     elseif rand2<partita(2)
-        dispO('natural inf death');                                             % what happens to the plant's aphid pop when it dies? Disperse them...
+        dispO('natural inf death');                                             
         rand4=ceil(rand()*ihosts);
         %if plantDeathDisperses
         %    [fieldP,fieldA1,fieldA2]=plantDeath(sites_i(rand4),fieldP,fieldA1,fieldA2);
@@ -508,7 +508,7 @@ while t<fullTime
         fieldA1(indA1)=fieldA1(indA1)-1;
     elseif rand2<partita(10)   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Aptarae events %%%%%%%%%%%%%%%%%%
         dispR('aptarae immigration');
-        out=apterousProbingChain(double(fieldP), ceil(rand()*(k*k))); % instead of -99 just starting dispersal from a random plant, this seems quite reasonable
+        out=apterousProbingChain(double(fieldP), ceil(rand()*(k*k))); % instead of -99 starting dispersal from a random plant
         outy=out;
         if any(any((mod(out,10)>=5)))==1, outy((mod(outy,10)>=5))=outy(mod(outy,10)>=5)-ones(sum(sum(mod(outy,10)>=5)),1)*5; end
         sorta=sort(find(mod(fieldP,10)==2));
