@@ -17,7 +17,7 @@ global pfeedS sigA1 Pacq Pinoc epsVec Pmutate
 
 % probelosevirus=1;
 strains=length(epsVec);
-infected=0;   % i.e. always start out dispersals without virus for NPT !!! Situation for immigrants requires treatment of this, current default is no immigrants
+infected=0;   % i.e. always start out dispersals without virus for NPT !!! Situation for immigrants may require treatment of this, current default is no immigrants
 dimf=size(fieldP);
 mRows=dimf(1);
 mCols=dimf(2);
